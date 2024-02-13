@@ -32,4 +32,9 @@ public class Shooting : MonoBehaviour
             transform.position += transform.forward * shootingSpeed * Time.deltaTime;
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+            Destroy(gameObject);
+    }
 }
