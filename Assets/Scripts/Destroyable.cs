@@ -8,7 +8,7 @@ public class Destroyable : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Bullet"))
         {
-            Destroy(collision.gameObject);
+            Destroy(gameObject);
         }
     }
 }

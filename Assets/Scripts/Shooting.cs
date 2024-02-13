@@ -7,6 +7,7 @@ public class Shooting : MonoBehaviour
 {
     [SerializeField] float shootingSpeed;
     [SerializeField] float shootingRate;
+    [SerializeField] float shootingDistanceMax;
 
     public Animator animator;
 
@@ -17,9 +18,18 @@ public class Shooting : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) 
+        //if (Time.time >= shootingRate)
+        //{
+            Shoot();
+
+        //    shootingRate = Time.time + 1f / shootingRate;
+        //}
+    }
+    void Shoot()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            transform.position += transform.forward * shootingSpeed * Time.deltaTime * shootingRate;
+            transform.position += transform.forward * shootingSpeed * Time.deltaTime;
         }
     }
 }
