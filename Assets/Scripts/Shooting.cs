@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] float shootingSpeed;
+    [SerializeField] float shootingRate;
+
+    public Animator animator;
+
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) 
+        {
+            transform.position += transform.forward * shootingSpeed * Time.deltaTime * shootingRate;
+        }
     }
 }
