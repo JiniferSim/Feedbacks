@@ -8,6 +8,7 @@ public class SpawnProjectiles : MonoBehaviour
     public GameObject firePoint;
     public List<GameObject> vfx = new List<GameObject>();
     private GameObject effectToSpawn;
+    public GameObject wand;
 
     void Start()
     {
@@ -28,7 +29,7 @@ public class SpawnProjectiles : MonoBehaviour
 
         if(firePoint != null)
         {
-            vfx = Instantiate(effectToSpawn, firePoint.transform.position, Quaternion.identity);
+            vfx = Instantiate(effectToSpawn, firePoint.transform.position, wand.transform.rotation);
         }
         
     }

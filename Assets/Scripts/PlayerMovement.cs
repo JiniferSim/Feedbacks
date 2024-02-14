@@ -4,48 +4,54 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
+    CharacterController characterController;
+    public float MovementSpeed = 5f;
+    public float JumpForce = 8f;
+    public float Gravity = 9.8f;
+    private float velocity = 0;
+    private bool isJumping = false;
 
-    public float moveSpeed = 8f;
-    public float rotationSpeed = 100f;
-
-    private float horizontal;
-    private float vertical;
-
-    private void Update()
+    private void Start()
     {
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
+        characterController = GetComponent<CharacterController>();
+    }
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+    void Update()
+    {
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+
+        // Gravity
+        if (characterController.isGrounded && velocity < 0)
         {
-            rb.AddForce(Vector3.up, ForceMode.Impulse);
+            velocity = -0.5f;
         }
-    }
+        else
+        {
+            velocity -= Gravity * Time.deltaTime;
+        }
 
-    private void FixedUpdate()
-    {
-        MovePlayer();
-        RotatePlayer();
-    }
+        // Camera
+        float horizontal = Input.GetAxis("Horizontal") * MovementSpeed;
+        float vertical = Input.GetAxis("Vertical") * MovementSpeed;
 
-    private void MovePlayer()
-    {
-        Vector3 movement = transform.forward * vertical * moveSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + movement);
-    }
+        Vector3 moveDirection = (cameraRight * horizontal + cameraForward * vertical).normalized * MovementSpeed;
 
-    private void RotatePlayer()
-    {
-        float rotation = horizontal * rotationSpeed * Time.fixedDeltaTime;
-        Quaternion deltaRotation = Quaternion.Euler(Vector3.up * rotation);
-        rb.MoveRotation(rb.rotation * deltaRotation);
-    }
+        // Jump
+        if (characterController.isGrounded)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                velocity = JumpForce;
+                isJumping = true;
+            }
+        }
 
-    private bool IsGrounded()
-    {
-        return Physics.Raycast(groundCheck.position, Vector3.down, 0.2f, groundLayer);
+        characterController.Move((moveDirection + new Vector3(0, velocity, 0)) * Time.deltaTime);
+
+        if (characterController.isGrounded && isJumping)
+        {
+            isJumping = false;
+        }
     }
 }

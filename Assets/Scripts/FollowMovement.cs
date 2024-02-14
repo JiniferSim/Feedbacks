@@ -1,26 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraMovement : MonoBehaviour
 {
-    public float FollowSpeed = 2f;
-    public Transform target;
-    private Quaternion initialRotation;
-    private Vector3 initialOffset;
+    public float horizontalSpeed = 1f;
 
+    public float verticalSpeed = 1f;
+    private float xRotation = 0.0f;
+    private float yRotation = 0.0f;
+    public float restartDelay = 2f;
+    private Camera cam;
     void Start()
     {
-        initialRotation = Quaternion.Inverse(target.rotation) * transform.rotation;
-        initialOffset = transform.position - target.position;
+        cam = Camera.main;
     }
 
     void Update()
     {
-        Quaternion targetRotation = target.rotation * initialRotation;
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, FollowSpeed * Time.deltaTime);
+        // Cursor lock
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
-        Vector3 targetPosition = target.position + initialOffset;
-        transform.position = Vector3.Lerp(transform.position, targetPosition, FollowSpeed * Time.deltaTime);
+        //Camera movement
+        float mouseX = Input.GetAxis("Mouse X") * horizontalSpeed;
+        float mouseY = Input.GetAxis("Mouse Y") * verticalSpeed;
+
+        yRotation += mouseX;
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90, 90);
+
+        cam.transform.eulerAngles = new Vector3(xRotation, yRotation, 0.0f);
+
+    }
+
+    void Restart()
+    {
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene("LevelDesign");
     }
 }

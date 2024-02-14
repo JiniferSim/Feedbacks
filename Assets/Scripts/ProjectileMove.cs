@@ -9,7 +9,7 @@ public class ProjectileMove : MonoBehaviour
 
     void Start()
     {
-        
+        Debug.Log(transform.forward);
     }
 
     void Update()
