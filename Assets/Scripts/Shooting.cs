@@ -18,12 +18,7 @@ public class Shooting : MonoBehaviour
 
     void Update()
     {
-        //if (Time.time >= shootingRate)
-        //{
-            Shoot();
-
-        //    shootingRate = Time.time + 1f / shootingRate;
-        //}
+            Shoot(); 
     }
     void Shoot()
     {
