@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class PoorGeckon : MonoBehaviour
 {
     public Animator animator;
+    public TextMeshPro textMeshPro;
     private Vector3 moveDirection;
     public float moveSpeed = 5f;
     private bool isDead = false;
@@ -41,6 +43,7 @@ public class PoorGeckon : MonoBehaviour
             animator.SetTrigger("Hit");
             animator.SetTrigger("Die");
             isDead = true;
+            textMeshPro.gameObject.SetActive(true);
         }
     }
     void ChangeDirection()
